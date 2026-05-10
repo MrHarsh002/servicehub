@@ -8,11 +8,27 @@ const app = express();
 // Middleware
 app.use(cors());
 app.use(express.json());
+app.use((req, res, next) => {
+  console.log(`${req.method} ${req.url}`);
+  next();
+});
 
 // Database Connection
-mongoose.connect(process.env.MONGODB_URI)
+mongoose.connect(process.env.MONGODB_URI, {
+  serverSelectionTimeoutMS: 5000, // Timeout after 5s instead of 30s
+})
   .then(() => console.log('MongoDB connected'))
-  .catch(err => console.error('MongoDB error:', err));
+  .catch(err => {
+    console.error('MongoDB connection error:', err.message);
+    if (err.name === 'MongooseServerSelectionError') {
+      console.log('\n--- TROUBLESHOOTING TIP ---');
+      console.log('If you are seeing a timeout, check your IP whitelist in MongoDB Atlas.');
+      console.log('Current public IP: 152.59.85.203');
+      console.log('OR switch to local MongoDB by changing MONGODB_URI in .env to:');
+      console.log('mongodb://localhost:27017/servicehub');
+      console.log('---------------------------\n');
+    }
+  });
 
 // Routes
 app.use('/api/auth', require('./routes/auth'));

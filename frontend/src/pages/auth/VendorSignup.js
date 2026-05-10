@@ -79,7 +79,7 @@ function VendorSignup() {
             <p>Join thousands of service providers who trust our platform to scale their business. Quick onboarding, verified leads, and secure payments.</p>
             <div style={{ marginTop: '40px', fontSize: '40px' }}>🛠️🤝</div>
           </div>
-          
+
           <div className="auth-form-container" style={{ maxHeight: '85vh', overflowY: 'auto' }}>
             <h3>Register Your Business</h3>
             <form onSubmit={handleSubmit}>

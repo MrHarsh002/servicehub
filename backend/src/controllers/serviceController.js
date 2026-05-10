@@ -6,6 +6,7 @@ exports.getAllServices = async (req, res) => {
     const services = await Service.find();
     res.status(200).json({ services });
   } catch (error) {
+    console.error('getAllServices error:', error);
     res.status(500).json({ message: 'Error fetching services', error: error.message });
   }
 };
@@ -17,6 +18,7 @@ exports.getServicesByCategory = async (req, res) => {
     const services = await Service.find({ category });
     res.status(200).json({ services });
   } catch (error) {
+    console.error('getServicesByCategory error:', error);
     res.status(500).json({ message: 'Error fetching services', error: error.message });
   }
 };
@@ -31,6 +33,7 @@ exports.getServiceById = async (req, res) => {
     }
     res.status(200).json({ service });
   } catch (error) {
+    console.error('getServiceById error:', error);
     res.status(500).json({ message: 'Error fetching service', error: error.message });
   }
 };
@@ -51,6 +54,7 @@ exports.createService = async (req, res) => {
     await service.save();
     res.status(201).json({ message: 'Service created', service });
   } catch (error) {
+    console.error('createService error:', error);
     res.status(500).json({ message: 'Error creating service', error: error.message });
   }
 };

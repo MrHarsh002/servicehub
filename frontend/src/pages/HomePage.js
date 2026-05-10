@@ -9,6 +9,7 @@ function HomePage() {
   const [filteredServices, setFilteredServices] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState('');
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const navigate = useNavigate();
 
   const categories = ['Plumbing', 'Electrical', 'Cleaning', 'Carpentry', 'Painting', 'Other'];
@@ -37,12 +38,14 @@ function HomePage() {
 
   const fetchServices = async () => {
     try {
+      setError(null);
       const response = await api.get('/services');
       setServices(response.data.services || []);
       setFilteredServices(response.data.services || []);
       setLoading(false);
     } catch (error) {
       console.error('Error fetching services:', error);
+      setError('Could not connect to the server. Please check if the backend is running and the database is connected.');
       toast.error('Failed to fetch services');
       setLoading(false);
     }
@@ -186,7 +189,14 @@ function HomePage() {
       </section>
 
       <div className="services-grid container">
-        {filteredServices.length > 0 ? (
+        {error ? (
+          <div style={{ gridColumn: '1 / -1', textAlign: 'center', padding: '40px' }}>
+            <p style={{ color: '#e91e63', fontWeight: '700' }}>{error}</p>
+            <button className="btn-primary" onClick={fetchServices} style={{ marginTop: '16px' }}>
+              Retry
+            </button>
+          </div>
+        ) : filteredServices.length > 0 ? (
           filteredServices.map(service => (
             <div key={service._id} className="service-card">
               <div className="service-card-image">{getCategoryIcon(service.category)}</div>

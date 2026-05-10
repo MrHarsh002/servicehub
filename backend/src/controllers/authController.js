@@ -99,7 +99,7 @@ exports.customerSignup = async (req, res) => {
     let otpRecord = null;
     if (phone && email) {
       // Try to find by phone OR email
-      otpRecord = await OTP.findOne({ 
+      otpRecord = await OTP.findOne({
         $or: [
           { phone, otp },
           { email, otp }
@@ -172,11 +172,7 @@ exports.customerSignup = async (req, res) => {
 // Vendor Signup
 exports.vendorSignup = async (req, res) => {
   try {
-    const { businessName, ownerName, email, phone, password, category, licenseNumber } = req.body;
-
-    if (email !== 'vendor@example.com') {
-      return res.status(403).json({ message: 'Only vendor@example.com is allowed as the single vendor account' });
-    }
+    const { businessName, ownerName, email, phone, password, category, licenseNumber, address, city } = req.body;
 
     // Check if email already exists
     const existingVendor = await Vendor.findOne({ email });
@@ -193,6 +189,8 @@ exports.vendorSignup = async (req, res) => {
       password,
       category,
       licenseNumber,
+      address,
+      city,
       isVerified: true,
       isUniversal: true
     });
@@ -303,5 +301,48 @@ exports.vendorLogin = async (req, res) => {
     });
   } catch (error) {
     res.status(500).json({ message: 'Error during login', error: error.message });
+  }
+};
+
+// Update Vendor Profile
+exports.updateVendorProfile = async (req, res) => {
+  try {
+    const vendorId = req.userId;
+    const { businessName, ownerName, phone, address, city, licenseNumber } = req.body;
+
+    const vendor = await Vendor.findById(vendorId);
+    if (!vendor) {
+      return res.status(404).json({ message: 'Vendor not found' });
+    }
+
+    vendor.businessName = businessName || vendor.businessName;
+    vendor.ownerName = ownerName || vendor.ownerName;
+    vendor.phone = phone || vendor.phone;
+    vendor.address = address || vendor.address;
+    vendor.city = city || vendor.city;
+    vendor.licenseNumber = licenseNumber || vendor.licenseNumber;
+
+    await vendor.save();
+
+    res.status(200).json({
+      message: 'Profile updated successfully',
+      vendor: {
+        id: vendor._id,
+        businessName: vendor.businessName,
+        ownerName: vendor.ownerName,
+        email: vendor.email,
+        phone: vendor.phone,
+        category: vendor.category,
+        address: vendor.address,
+        city: vendor.city,
+        licenseNumber: vendor.licenseNumber,
+        profileImage: vendor.profileImage,
+        rating: vendor.rating,
+        totalRatings: vendor.totalRatings,
+        isVerified: vendor.isVerified
+      }
+    });
+  } catch (error) {
+    res.status(500).json({ message: 'Error updating profile', error: error.message });
   }
 };

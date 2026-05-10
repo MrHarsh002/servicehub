@@ -29,7 +29,7 @@ function App() {
     // Check if user is already logged in
     const token = localStorage.getItem('token');
     const user = localStorage.getItem('user');
-    
+
     if (token && user) {
       setAuth({
         token,
@@ -64,27 +64,27 @@ function App() {
             <Route path="/vendor/login" element={<VendorLogin />} />
 
             {/* Customer Routes */}
-            <Route 
-              path="/customer/dashboard" 
-              element={auth?.role === 'customer' ? <CustomerDashboard /> : <Navigate to="/customer/login" />} 
+            <Route
+              path="/customer/dashboard"
+              element={auth?.role === 'customer' ? <CustomerDashboard /> : <Navigate to="/customer/login" />}
             />
-            <Route 
-              path="/customer/bookings" 
-              element={auth?.role === 'customer' ? <CustomerBookings /> : <Navigate to="/customer/login" />} 
+            <Route
+              path="/customer/bookings"
+              element={auth?.role === 'customer' ? <CustomerBookings /> : <Navigate to="/customer/login" />}
             />
-            <Route 
-              path="/service/:id" 
-              element={auth?.role === 'customer' ? <ServiceDetails /> : <Navigate to="/customer/login" />} 
+            <Route
+              path="/service/:id"
+              element={auth?.role === 'customer' ? <ServiceDetails /> : <Navigate to="/customer/login" />}
             />
 
             {/* Vendor Routes */}
-            <Route 
-              path="/vendor/dashboard" 
-              element={auth?.role === 'vendor' ? <VendorDashboard /> : <Navigate to="/vendor/login" />} 
+            <Route
+              path="/vendor/dashboard"
+              element={auth?.role === 'vendor' ? <VendorDashboard /> : <Navigate to="/vendor/login" />}
             />
-            <Route 
-              path="/vendor/bookings" 
-              element={auth?.role === 'vendor' ? <VendorBookings /> : <Navigate to="/vendor/login" />} 
+            <Route
+              path="/vendor/bookings"
+              element={auth?.role === 'vendor' ? <VendorBookings /> : <Navigate to="/vendor/login" />}
             />
 
             {/* Redirect unknown routes */}
