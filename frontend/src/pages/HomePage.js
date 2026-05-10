@@ -87,8 +87,8 @@ function HomePage() {
     return (
       <>
         <Navbar />
-        <div style={{ textAlign: 'center', padding: '40px' }}>
-          <div className="spinner" style={{ margin: '0 auto' }}></div>
+        <div className="spinner-wrapper">
+          <div className="spinner"></div>
         </div>
       </>
     );
@@ -191,9 +191,9 @@ function HomePage() {
 
       <div className="services-grid container">
         {error ? (
-          <div style={{ gridColumn: '1 / -1', textAlign: 'center', padding: '40px' }}>
-            <p style={{ color: '#e91e63', fontWeight: '700' }}>{error}</p>
-            <button className="btn-primary" onClick={fetchServices} style={{ marginTop: '16px' }}>
+          <div className="error-container" style={{ gridColumn: '1 / -1' }}>
+            <p className="error-text">{error}</p>
+            <button className="btn-primary" onClick={fetchServices}>
               Retry
             </button>
           </div>
@@ -207,9 +207,8 @@ function HomePage() {
                 <p>{service.description}</p>
                 <div className="price">₹{service.basePrice}</div>
                 <small>Est. Duration: {service.estimatedDuration}</small>
-                <button 
-                  className="btn-primary" 
-                  style={{ marginTop: '16px', width: '100%' }}
+                <button
+                  className="btn-primary btn-full mt-16"
                   onClick={() => handleBookService(service._id)}
                 >
                   Book Now
@@ -218,7 +217,7 @@ function HomePage() {
             </div>
           ))
         ) : (
-          <div style={{ gridColumn: '1 / -1', textAlign: 'center', padding: '40px' }}>
+          <div className="empty-state" style={{ gridColumn: '1 / -1' }}>
             <p>No services found</p>
           </div>
         )}

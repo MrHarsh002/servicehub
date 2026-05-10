@@ -69,8 +69,8 @@ function CustomerBookings() {
     return (
       <>
         <Navbar />
-        <div style={{ textAlign: 'center', padding: '40px' }}>
-          <div className="spinner" style={{ margin: '0 auto' }}></div>
+        <div className="spinner-wrapper">
+          <div className="spinner"></div>
         </div>
       </>
     );
@@ -110,14 +110,9 @@ function CustomerBookings() {
               </div>
 
               {booking.vendor && (
-                <div style={{ 
-                  backgroundColor: '#f0f4f8', 
-                  padding: '15px', 
-                  borderRadius: '5px',
-                  marginBottom: '15px'
-                }}>
+                <div className="vendor-info-box">
                   <strong>Vendor Details:</strong>
-                  <div style={{ marginTop: '10px' }}>
+                  <div className="vendor-contact-info">
                     <p><strong>{booking.vendor.businessName}</strong></p>
                     <p>Phone: {booking.vendor.phone}</p>
                     <p>Email: {booking.vendor.email}</p>
@@ -126,35 +121,20 @@ function CustomerBookings() {
               )}
 
               {booking.status === 'Completed' && !booking.customerRating && (
-                <div style={{ marginTop: '20px' }}>
+                <div className="booking-rate-section">
                   {selectedBooking === booking._id ? (
-                    <div style={{ 
-                      backgroundColor: '#ffffff', 
-                      padding: '25px', 
-                      borderRadius: '16px',
-                      border: '1px solid #e0e7ff',
-                      boxShadow: '0 4px 15px rgba(0,0,0,0.02)'
-                    }}>
+                    <div className="rating-modal-v2">
                       <h4 style={{ fontSize: '18px', fontWeight: '800', marginBottom: '20px', color: '#1a1a1a' }}>Rate Your Experience</h4>
                       
-                      <div style={{ marginBottom: '25px' }}>
-                        <p style={{ fontSize: '12px', color: '#666', fontWeight: '700', marginBottom: '10px', textTransform: 'uppercase' }}>Your Rating</p>
-                        <div style={{ display: 'flex', gap: '10px' }}>
+                      <div className="form-group">
+                        <label>Your Rating</label>
+                        <div className="rating-stars">
                           {[1, 2, 3, 4, 5].map((star) => (
                             <button
                               key={star}
                               onClick={() => setRating(star.toString())}
-                              style={{ 
-                                background: 'none', 
-                                border: 'none', 
-                                fontSize: '32px', 
-                                cursor: 'pointer',
-                                color: parseInt(rating) >= star ? '#ffc107' : '#e0e0e0',
-                                transition: 'transform 0.1s ease',
-                                padding: '0'
-                              }}
-                              onMouseEnter={(e) => e.target.style.transform = 'scale(1.2)'}
-                              onMouseLeave={(e) => e.target.style.transform = 'scale(1)'}
+                              className="star-btn"
+                              style={{ color: parseInt(rating) >= star ? '#ffc107' : '#e0e0e0' }}
                             >
                               ★
                             </button>
@@ -162,36 +142,28 @@ function CustomerBookings() {
                         </div>
                       </div>
 
-                      <div style={{ marginBottom: '25px' }}>
-                        <p style={{ fontSize: '12px', color: '#666', fontWeight: '700', marginBottom: '10px', textTransform: 'uppercase' }}>Your Review</p>
+                      <div className="form-group">
+                        <label>Your Review</label>
                         <textarea
+                          className="review-textarea"
                           value={review}
                           onChange={(e) => setReview(e.target.value)}
                           placeholder="What did you like about the service?"
                           rows="3"
-                          style={{ 
-                            width: '100%', 
-                            padding: '15px', 
-                            borderRadius: '12px', 
-                            border: '1px solid #ddd',
-                            fontSize: '14px',
-                            resize: 'none',
-                            backgroundColor: '#fcfcfc'
-                          }}
                         ></textarea>
                       </div>
 
                       <div style={{ display: 'flex', gap: '15px' }}>
                         <button 
                           className="btn-primary"
-                          style={{ flex: 2, padding: '12px', borderRadius: '8px', fontWeight: '700' }}
+                          style={{ flex: 2 }}
                           onClick={() => handleRateBooking(booking._id)}
                         >
-                          Submit Review
+                          Submit
                         </button>
                         <button 
                           className="btn-secondary"
-                          style={{ flex: 1, padding: '12px', borderRadius: '8px', fontWeight: '700' }}
+                          style={{ flex: 1 }}
                           onClick={() => setSelectedBooking(null)}
                         >
                           Cancel
@@ -200,15 +172,7 @@ function CustomerBookings() {
                     </div>
                   ) : (
                     <button 
-                      className="btn-primary"
-                      style={{ 
-                        width: '100%', 
-                        padding: '14px', 
-                        borderRadius: '8px', 
-                        fontWeight: '700',
-                        background: 'linear-gradient(93deg, #2ecc71, #27ae60)',
-                        border: 'none'
-                      }}
+                      className="btn-rate-service"
                       onClick={() => setSelectedBooking(booking._id)}
                     >
                       RATE THIS SERVICE
@@ -218,12 +182,7 @@ function CustomerBookings() {
               )}
 
               {booking.customerRating && (
-                <div style={{ 
-                  backgroundColor: '#d1fae5', 
-                  padding: '15px', 
-                  borderRadius: '5px',
-                  marginTop: '15px'
-                }}>
+                <div className="completed-rating-box">
                   <strong>Your Rating: ⭐ {booking.customerRating}/5</strong>
                   <p style={{ marginTop: '10px' }}>{booking.customerReview}</p>
                 </div>
@@ -231,7 +190,7 @@ function CustomerBookings() {
             </div>
           ))
         ) : (
-          <div style={{ textAlign: 'center', padding: '40px' }}>
+          <div className="empty-state">
             <p>No bookings found. Start booking a service!</p>
           </div>
         )}

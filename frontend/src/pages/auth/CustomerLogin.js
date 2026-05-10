@@ -61,7 +61,7 @@ function CustomerLogin() {
           <div className="auth-banner">
             <h2>Welcome Back!</h2>
             <p>Login to manage your bookings, track service progress, and explore new home services tailored for you.</p>
-            <div style={{ marginTop: '40px', fontSize: '40px' }}>🔐✨</div>
+            <div className="auth-banner-icon">🔐✨</div>
           </div>
           
           <div className="auth-form-container">
@@ -98,7 +98,7 @@ function CustomerLogin() {
 
             <div className="auth-footer">
               <p>Don't have an account? <Link to="/customer/signup">CREATE ACCOUNT</Link></p>
-              <p style={{ marginTop: '10px' }}>Are you a Vendor? <Link to="/vendor/login">LOGIN AS VENDOR</Link></p>
+              <p className="mt-10">Are you a Vendor? <Link to="/vendor/login">LOGIN AS VENDOR</Link></p>
             </div>
           </div>
         </div>

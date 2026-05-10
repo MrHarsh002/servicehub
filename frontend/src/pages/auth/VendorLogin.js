@@ -61,7 +61,7 @@ function VendorLogin() {
           <div className="auth-banner">
             <h2>Vendor Partner Portal</h2>
             <p>Grow your business with us. Manage your service requests, track earnings, and provide top-notch service to our customers.</p>
-            <div style={{ marginTop: '40px', fontSize: '40px' }}>💼📈</div>
+            <div className="auth-banner-icon">💼📈</div>
           </div>
           
           <div className="auth-form-container">
@@ -98,7 +98,7 @@ function VendorLogin() {
 
             <div className="auth-footer">
               <p>New partner? <Link to="/vendor/signup">REGISTER BUSINESS</Link></p>
-              <p style={{ marginTop: '10px' }}>Are you a Customer? <Link to="/customer/login">LOGIN AS CUSTOMER</Link></p>
+              <p className="mt-10">Are you a Customer? <Link to="/customer/login">LOGIN AS CUSTOMER</Link></p>
             </div>
           </div>
         </div>

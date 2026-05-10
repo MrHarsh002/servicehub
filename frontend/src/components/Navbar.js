@@ -30,33 +30,60 @@ function Navbar() {
   }, [isHomePage]);
 
   const isAuthPage = location.pathname.includes('/login') || location.pathname.includes('/signup');
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
 
   return (
-    <nav className={`navbar ${(!isHomePage || scrolled) ? 'navbar-scrolled' : 'navbar-transparent'}`}>
+    <nav className={`navbar ${(!isHomePage || scrolled) ? 'navbar-scrolled' : 'navbar-transparent'} ${isMenuOpen ? 'menu-open' : ''}`}>
       <div className="navbar-container">
-        <Link to="/" className="navbar-logo">
+        <Link to="/" className="navbar-logo" onClick={() => setIsMenuOpen(false)}>
           <span className="logo-text">make</span>
           <span className="logo-box">my</span>
           <span className="logo-text">service</span>
         </Link>
-        
-        <ul className="navbar-links">
-          {!isHomePage && !isAuthPage && <li><Link to="/">Home</Link></li>}
+
+        {/* Hamburger Icon */}
+        <button className="mobile-menu-btn" onClick={toggleMenu} aria-label="Toggle navigation">
+          <span className={`hamburger ${isMenuOpen ? 'active' : ''}`}></span>
+        </button>
+
+        <ul className={`navbar-links ${isMenuOpen ? 'show' : ''}`}>
+          <button className="side-menu-close" onClick={() => setIsMenuOpen(false)} aria-label="Close menu">
+            &times;
+          </button>
+          {!isHomePage && !isAuthPage && (
+            <li><Link to="/" onClick={() => setIsMenuOpen(false)}>Home</Link></li>
+          )}
           {auth?.role === 'customer' && (
             <>
-              <li><Link to="/customer/dashboard">Dashboard</Link></li>
-              <li><Link to="/customer/bookings">My Bookings</Link></li>
+              <li><Link to="/customer/dashboard" onClick={() => setIsMenuOpen(false)}>Dashboard</Link></li>
+              <li><Link to="/customer/bookings" onClick={() => setIsMenuOpen(false)}>My Bookings</Link></li>
             </>
           )}
           {auth?.role === 'vendor' && (
             <>
-              <li><Link to="/vendor/dashboard">Dashboard</Link></li>
-              <li><Link to="/vendor/bookings">Work List</Link></li>
+              <li><Link to="/vendor/dashboard" onClick={() => setIsMenuOpen(false)}>Dashboard</Link></li>
+              <li><Link to="/vendor/bookings" onClick={() => setIsMenuOpen(false)}>Work List</Link></li>
             </>
+          )}
+          {/* Mobile Auth Links */}
+          {isMenuOpen && (
+            <li className="mobile-only-auth">
+              {auth ? (
+                <button type="button" onClick={() => { logout(); setIsMenuOpen(false); }} className="logout-link">
+                  Logout
+                </button>
+              ) : (
+                <Link to="/customer/login" className="btn-login-mmt" onClick={() => setIsMenuOpen(false)}>
+                  Login / Signup
+                </Link>
+              )}
+            </li>
           )}
         </ul>
 
-        <div className="navbar-auth">
+        <div className="navbar-auth hide-mobile">
           {auth ? (
             <div className="user-profile">
               <div className="avatar">{auth.user.name?.[0] || auth.user.businessName?.[0]}</div>
