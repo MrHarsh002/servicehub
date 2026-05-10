@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = 'https://servicehub-pi.vercel.app/api';
+const API_URL = 'http://localhost:5000/api' || 'https://servicehub-pi.vercel.app/api';
 
 const api = axios.create({
   baseURL: API_URL,

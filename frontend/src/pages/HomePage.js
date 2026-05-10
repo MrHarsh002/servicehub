@@ -45,7 +45,8 @@ function HomePage() {
       setLoading(false);
     } catch (error) {
       console.error('Error fetching services:', error);
-      setError('Could not connect to the server. Please check if the backend is running and the database is connected.');
+      const backendMessage = error.response?.data?.message;
+      setError(backendMessage || 'Could not connect to the server. Please check if the backend is running and the database is connected.');
       toast.error('Failed to fetch services');
       setLoading(false);
     }

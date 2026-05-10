@@ -1,6 +1,7 @@
 const express = require('express');
-const mongoose = require('mongoose');
 const cors = require('cors');
+const mongoose = require('mongoose');
+const { connectDB } = require('./utils/db');
 require('dotenv').config();
 
 const app = express();
@@ -13,21 +14,24 @@ app.use((req, res, next) => {
   next();
 });
 
-// Database Connection
-mongoose.connect(process.env.MONGODB_URI, {
-  serverSelectionTimeoutMS: 5000, // Timeout after 5s instead of 30s
-})
+// Ensure database is connected before serving API requests.
+app.use('/api', async (req, res, next) => {
+  try {
+    await connectDB();
+    next();
+  } catch (err) {
+    console.error('MongoDB connection error:', err.message);
+    res.status(503).json({
+      message: 'Database unavailable. Please try again shortly.',
+      error: err.message
+    });
+  }
+});
+
+connectDB()
   .then(() => console.log('MongoDB connected'))
   .catch(err => {
-    console.error('MongoDB connection error:', err.message);
-    if (err.name === 'MongooseServerSelectionError') {
-      console.log('\n--- TROUBLESHOOTING TIP ---');
-      console.log('If you are seeing a timeout, check your IP whitelist in MongoDB Atlas.');
-      console.log('Current public IP: 152.59.85.203');
-      console.log('OR switch to local MongoDB by changing MONGODB_URI in .env to:');
-      console.log('mongodb://localhost:27017/servicehub');
-      console.log('---------------------------\n');
-    }
+    console.error('Initial MongoDB connection failed:', err.message);
   });
 
 // Routes
@@ -42,7 +46,17 @@ app.get('/', (req, res) => {
 
 // Health check
 app.get('/api/health', (req, res) => {
-  res.json({ status: 'Server running' });
+  const states = {
+    0: 'disconnected',
+    1: 'connected',
+    2: 'connecting',
+    3: 'disconnecting'
+  };
+
+  res.json({
+    status: 'Server running',
+    db: states[mongoose.connection.readyState] || 'unknown'
+  });
 });
 
 const PORT = process.env.PORT || 5000;
