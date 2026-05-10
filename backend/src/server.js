@@ -19,6 +19,11 @@ app.use('/api/auth', require('./routes/auth'));
 app.use('/api/services', require('./routes/services'));
 app.use('/api/bookings', require('./routes/bookings'));
 
+// Root route for Vercel deployments
+app.get('/', (req, res) => {
+  res.json({ status: 'Service booking API running' });
+});
+
 // Health check
 app.get('/api/health', (req, res) => {
   res.json({ status: 'Server running' });
